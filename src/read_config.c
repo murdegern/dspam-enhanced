@@ -183,11 +183,11 @@ config_t read_config(const char *path) {
   }
 #endif
 
-  if (config_path == NULL) {
+  if (!config_path || !*config_path) {
     /* if no path in argument, fallback to env var */
     config_path = getenv("DSPAM_CONF");
     /* but only if real UID != effective UID and same for group  */
-    if (config_path == NULL || getuid() != geteuid() || getgid() != getegid())
+    if (!config_path || !*config_path || getuid() != geteuid() || getgid() != getegid())
       config_path = CONFIG_DEFAULT;
   }
 #ifdef DEBUG

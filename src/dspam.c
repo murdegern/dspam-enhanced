@@ -145,7 +145,10 @@ main (int argc, char *argv[])
 
   /* Read dspam.conf into global config structure (ds_config_t) */
 
-  const char *const config_path = get_config_path(argc, argv);
+  const char *config_path = get_config_path(argc, argv);
+  if (!config_path) {
+    config_path = CONFIG_DEFAULT;
+  }
   agent_config = read_config(config_path);
   if (!agent_config) {
     LOG(LOG_ERR, ERR_AGENT_READ_CONFIG);
