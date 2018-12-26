@@ -42,6 +42,7 @@
 #include "language.h"
 #include "storage_driver.h"
 #include "pgsql_drv.h"
+#include "agent_shared.h"
 
 DSPAM_CTX *open_ctx, *open_mtx;
 
@@ -108,7 +109,7 @@ main (int argc, char **argv)
 #endif
 
   for(i=0;i<argc;i++) {
-                                                                                
+
     if (!strncmp (argv[i], "--profile=", 10))
     {
       if (!_ds_match_attribute(agent_config, "Profile", argv[i]+10)) {
@@ -180,7 +181,7 @@ main (int argc, char **argv)
     dspam_destroy(open_ctx);
     exit(EXIT_FAILURE);
   }
- 
+
   store = (struct _pgsql_drv_storage *)(open_ctx->storage);
   GenSQL(store->dbh,file);
   //PQfinish(store->dbh);
@@ -218,7 +219,7 @@ GenSQL (PGconn *dbh,const char *file)
     out=stdout;
   } else {
     if ( (out = fopen(file,"w+")) == NULL ) {
-      fprintf(stderr, "Failed to open file %s for writing - %s\n", 
+      fprintf(stderr, "Failed to open file %s for writing - %s\n",
               file, strerror(errno));
       PQfinish(dbh);
       exit(EXIT_FAILURE);
@@ -235,19 +236,19 @@ GenSQL (PGconn *dbh,const char *file)
   }
 
   ntuples = PQntuples(result);
-  for (i=0; i<ntuples; i++) 
+  for (i=0; i<ntuples; i++)
   {
-    if (!type_check) 
+    if (!type_check)
     {
       type_check = 1;
       col_type = PQftype(result, 1);
 
-      if (col_type == BIGINTOID) 
+      if (col_type == BIGINTOID)
       {
         fprintf(stderr, "Datatype of dspam_token_data.token *not* NUMERIC;\n"
            "assuming that you want to revert back to NUMERIC(20) type from BIGINT type\n");
         reverse=1;
-      } else if (col_type != NUMERICOID) 
+      } else if (col_type != NUMERICOID)
       {
         fprintf(stderr, "Type of dspam_token_data.token is not BIGINT *or* NUMERIC(20)!\n"
            "I have got no clue of how to deal with this and I am going to sulk now.\n");
@@ -257,7 +258,7 @@ GenSQL (PGconn *dbh,const char *file)
         exit(EXIT_FAILURE);
       }
     }
-    if (!preamble) 
+    if (!preamble)
     {
       preamble = 1;
       if (reverse == 0) {
@@ -285,7 +286,7 @@ GenSQL (PGconn *dbh,const char *file)
     if (!reverse) {
       token = strtoull( PQgetvalue(result,i,1), NULL, 0);
       snprintf(token_data, TOKEN_DATA_LEN, "%lld", token);
-    } else { 
+    } else {
       token = (unsigned long long) strtoll( PQgetvalue(result,i,1), NULL, 0);
       snprintf(token_data, TOKEN_DATA_LEN, "%llu", token);
     }
@@ -344,9 +345,9 @@ void OutputMessage(DSPAM_CTX *open_ctx,char *sqlfile)
               filename, strerror(errno));
       dieout(0);
     }
- 
+
     db[0] = 0;
- 
+
     while (fgets (buffer, sizeof (buffer), file) != NULL)
     {
       chomp (buffer);
@@ -372,7 +373,7 @@ void OutputMessage(DSPAM_CTX *open_ctx,char *sqlfile)
   if (port == 0) port = 5432;
 
   fprintf(stderr, "Created SQL in %s; run using:\n", sqlfile);
-  
+
   if ( strlen(hostname) == 0 )
     fprintf(stderr, "\tpsql -q -p %d -U %s -d %s -f %s -v AUTOCOMMIT=off\n",
                     port, user, db, sqlfile);
@@ -403,4 +404,3 @@ usage (void)
   _ds_destroy_config(agent_config);
   exit(EXIT_FAILURE);
 }
-
