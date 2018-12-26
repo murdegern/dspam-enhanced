@@ -71,7 +71,7 @@
 #include "language.h"
 #include "util.h"
 
-#if defined(_DARWIN_C_SOURCE)
+#if defined(__APPLE__)
 #include "tools.hash_drv/fallocate_mac.h"
 #endif
 

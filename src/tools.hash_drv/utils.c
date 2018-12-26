@@ -14,7 +14,7 @@
 
 #include "hash_drv.h"
 
-#if defined(_DARWIN_C_SOURCE)
+#if defined(__APPLE__)
 #include "fallocate_mac.h"
 #elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 #include <fcntl.h>

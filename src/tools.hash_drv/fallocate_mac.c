@@ -1,4 +1,4 @@
-#if defined(_DARWIN_C_SOURCE)
+#if defined(__APPLE__)
 #include <fcntl.h>
 #include <unistd.h>
 #include "fallocate_mac.h"

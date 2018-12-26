@@ -28,6 +28,11 @@
 #ifdef HAVE_CONFIG_H
 #include <auto-config.h>
 #endif
+#ifdef __linux__
+#include <linux/limits.h>
+#else
+#include <sys/syslimits.h>
+#endif
 #include "libdspam.h"
 
 #ifndef _AGENT_SHARED_H
@@ -96,6 +101,7 @@ typedef struct {
 #endif
 #endif
 #endif
+  char config_path[PATH_MAX];
 } AGENT_CTX;
 
 int process_features	(AGENT_CTX *ATX, const char *features);

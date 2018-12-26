@@ -145,7 +145,8 @@ main (int argc, char *argv[])
 
   /* Read dspam.conf into global config structure (ds_config_t) */
 
-  agent_config = read_config(get_config_path(argc, argv));
+  const char *const config_path = get_config_path(argc, argv);
+  agent_config = read_config(config_path);
   if (!agent_config) {
     LOG(LOG_ERR, ERR_AGENT_READ_CONFIG);
     exitcode = EXIT_FAILURE;
@@ -166,6 +167,7 @@ main (int argc, char *argv[])
     goto BAIL;
   } else {
     agent_init = 1;
+    strncpy(ATX.config_path, config_path, sizeof(ATX.config_path)-1);
   }
 
   if (process_arguments(&ATX, argc, argv)) {
@@ -4239,7 +4241,7 @@ int daemon_start(AGENT_CTX *ATX) {
       if (agent_config)
         _ds_destroy_config(agent_config);
 
-      agent_config = read_config(get_config_path(argc, argv));
+      agent_config = read_config(ATX->config_path);
       if (!agent_config) {
         LOG(LOG_ERR, ERR_AGENT_READ_CONFIG);
         pthread_mutex_destroy(&__lock);
