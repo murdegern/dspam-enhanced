@@ -124,7 +124,7 @@ main (int argc, char *argv[])
   LOG(LOG_INFO, "debug compiled in, logdir: %s", LOGDIR);
 #endif
 #ifdef VERBOSE
-  LOG(LOG_INFO, "verbose compiled in, logdir: %", LOGDIR);
+  LOG(LOG_INFO, "verbose compiled in, logdir: %s", LOGDIR);
 #endif
 
   if (!config_drop_suid())
