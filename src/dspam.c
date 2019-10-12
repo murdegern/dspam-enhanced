@@ -2674,7 +2674,7 @@ DSPAM_CTX *ctx_init(AGENT_CTX *ATX, const char *username) {
                   LOGDEBUG ("skipping classification group (%s) entry %s: user %s is already in a global group", group, u, username);
                   continue;
                 } else if (is_group_member_classification == 1) {
-                  LOGDEBUG ("adding user %s to classification network group %", u, group);
+                  LOGDEBUG ("adding user %s to classification network group %s", u, group);
                   nt_add (ATX->classify_users, u);
                 } else {
                   LOGDEBUG ("skipping classification group entry %s for user %s", u, username);
@@ -2929,10 +2929,22 @@ int ensure_confident_result(DSPAM_CTX *CTX, AGENT_CTX *ATX, int result) {
     CTX->confidence = 0.60f;
   }
 
+
+  const char *confidence_override_str = _ds_read_attribute(agent_config, "GroupClassificationConfidenceOverride");
+  float confidence_override = 0.65;
+  if (confidence_override_str)
+  {
+      confidence_override = atof(confidence_override_str);
+	  if (confidence_override < 0.1)
+	  {
+		  confidence_override = 0.65;
+	  }
+  }
+
   if (result != DSR_ISSPAM               &&
       CTX->operating_mode == DSM_PROCESS &&
       CTX->classification == DSR_NONE    &&
-      CTX->confidence < 0.65)
+      CTX->confidence < confidence_override)
   {
     LOGDEBUG ("consulting %s group member list", (ATX->flags & DAF_GLOBAL) ? "global" : "classification");
 
