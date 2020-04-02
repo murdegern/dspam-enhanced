@@ -22,7 +22,6 @@ use POSIX qw(strftime ctime);
 use Time::Local;
 use vars qw { %CONFIG %DATA %FORM %LANG $MAILBOX $CURRENT_USER $USER $TMPFILE $USERSELECT };
 use vars qw { $CURRENT_STORE $LANGUAGE };
-
 #
 # Read configuration parameters common to all CGI scripts
 #
@@ -33,7 +32,7 @@ if (!(-e "configure.pl") || !(-r "configure.pl")) {
   print "</h1></center></body></html>\n";
   exit;
 }
-require "configure.pl";
+require "./configure.pl";
 
 #
 # The current CGI script
@@ -303,7 +302,7 @@ if ($FORM{'template'} eq "performance") {
 
 #
 # History Functions
-# 
+#
 
 sub DisplayFragment {
   $FORM{'signatureID'} =~ s/\///g;
@@ -367,7 +366,7 @@ sub DisplayHistory {
 
   open(LOG, "<:utf8", $LOG) or die "Can't open log file $LOG";
   while(<LOG>) {
-    my($time, $class, $from, $signature, $subject, $info, $messageid) 
+    my($time, $class, $from, $signature, $subject, $info, $messageid)
       = split(/\t/, $_);
     next if ($signature eq "");
 
@@ -380,7 +379,7 @@ sub DisplayHistory {
       } elsif ($class eq "F" || $class eq "M") {
         $rec{$signature}->{'class'} = $class;
         $rec{$signature}->{'count'}++;
-        $rec{$signature}->{'info'} = $info 
+        $rec{$signature}->{'info'} = $info
           if ($rec{$signature}->{'info'} eq "");
       }
       # filter out resents if there are any. Since it's the same
@@ -419,7 +418,7 @@ sub DisplayHistory {
   }
   $begin = int(($history_page - 1) * $CONFIG{'HISTORY_PER_PAGE'}) ;
 
-  # Now lets just keep the information that we really need. 
+  # Now lets just keep the information that we really need.
   @buffer = splice(@buffer, $begin,$CONFIG{'HISTORY_PER_PAGE'});
 
   my $retrain_checked_msg_no = 0;
@@ -443,14 +442,14 @@ sub DisplayHistory {
 
     # Resends of retrained messages will need the original from/subject line
     if ($messageid ne "") {
-      $from = $rec{$messageid}->{'from'} 
+      $from = $rec{$messageid}->{'from'}
         if ($from eq "<None Specified>");
-      $subject = $rec{$messageid}->{'subject'} 
+      $subject = $rec{$messageid}->{'subject'}
         if ($subject eq "<None Specified>");
 
-      $rec{$messageid}->{'from'} = $from 
+      $rec{$messageid}->{'from'} = $from
         if ($rec{$messageid}->{'from'} eq "");
-      $rec{$messageid}->{'subject'} = $subject 
+      $rec{$messageid}->{'subject'} = $subject
         if ($rec{$messageid}->{'subject'} eq "");
     }
 
@@ -483,7 +482,7 @@ sub DisplayHistory {
         $cl = "innocent"; $cllabel="$CONFIG{'LANG'}->{$LANGUAGE}->{'history_label_innocent'}";
       }
     }
-    elsif ($class eq "M") { 
+    elsif ($class eq "M") {
       if ($rec{$signature}->{'count'} % 2 != 0) {
           $cl = "missed"; $cllabel="$CONFIG{'LANG'}->{$LANGUAGE}->{'history_label_miss'}";
       } else {
@@ -530,7 +529,7 @@ sub DisplayHistory {
     my($retrain);
     if ($rec{$signature}->{'class'} =~ /^(M|F)$/ && $rec{$signature}->{'count'} % 2 != 0) {
       $retrain = "<b>$CONFIG{'LANG'}->{$LANGUAGE}->{'history_retrained'}</b>";
-    } 
+    }
 
     if ($retrain eq "") {
       $retrain = qq!<A HREF="$MYURL&amp;show=$show&amp;history_page=$history_page&amp;retrain=$rclass&amp;signatureID=$signature">$CONFIG{'LANG'}->{$LANGUAGE}->{'history_retrain_as'}&nbsp;! . ucfirst($CONFIG{'LANG'}->{$LANGUAGE}->{'history_retrain_as_'.$rclass}) . "</A>";
@@ -569,13 +568,13 @@ sub DisplayHistory {
     }
 
     my($entry) = <<_END;
-<tr>
- <td class="$cl $rowclass" nowrap="nowrap"><small>$cllabel</small></td>
- <td class="$rowclass" nowrap="nowrap">$retrain_action</td>
- <td class="$rowclass" nowrap="nowrap"><small>$ctime</small></td>
- <td class="$rowclass" nowrap="nowrap"><small>$from</small></td>
- <td class="$rowclass" nowrap="nowrap"><small>$subject</small></td>
- <td class="$rowclass" nowrap="nowrap"><small>$info</small></td>
+<tr id="rid$counter" class="$rowclass">
+ <td class="$cl" nowrap="nowrap"><small>$cllabel</small></td>
+ <td nowrap="nowrap">$retrain_action</td>
+ <td nowrap="nowrap"><small>$ctime</small></td>
+ <td nowrap="nowrap" onclick="clickcheckbox($counter)"><small>$from</small></td>
+ <td nowrap="nowrap" onclick="clickcheckbox($counter)"><small>$subject</small></td>
+ <td nowrap="nowrap"><small>$info</small></td>
 </tr>
 _END
 
@@ -680,7 +679,7 @@ sub DisplayAnalysis {
         my $idx;
         if ($period eq "weekly") {
           $idx="$tmon/$tday";
-        } else { 
+        } else {
           ($t_log>=$dailystart) || next;
           $idx=To12Hour($thour);
         }
@@ -771,7 +770,7 @@ sub DisplayPreferences {
     if ($FORM{'showFactors'} ne "on") {
       $FORM{'showFactors'} = "off";
     }
-                                                                                
+
     if ($FORM{'enableWhitelist'} ne "on") {
       $FORM{'enableWhitelist'} = "off";
     }
@@ -843,7 +842,7 @@ _END
 
   $DATA{"SEDATION_$PREFS{'statisticalSedation'}"} = "CHECKED";
   $DATA{"S_".$PREFS{'trainingMode'}} = "CHECKED";
-  $DATA{"S_ACTION_".uc($PREFS{'spamAction'})} = "CHECKED"; 
+  $DATA{"S_ACTION_".uc($PREFS{'spamAction'})} = "CHECKED";
   $DATA{"S_LOC_".uc($PREFS{'signatureLocation'})} = "CHECKED";
   $DATA{"SPAM_SUBJECT"} = $PREFS{'spamSubject'};
   if ($PREFS{'optIn'} eq "on") {
@@ -856,7 +855,7 @@ _END
     $DATA{"C_BNR"} = "CHECKED";
   }
   if ($PREFS{"showFactors"} eq "on") {
-    $DATA{"C_FACTORS"} = "CHECKED"; 
+    $DATA{"C_FACTORS"} = "CHECKED";
   }
   if ($PREFS{"enableWhitelist"} eq "on") {
     $DATA{"C_WHITELIST"} = "CHECKED";
@@ -1084,10 +1083,10 @@ sub Quarantine_DeleteSpam {
     my($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
      $atime,$mtime,$ctime,$blksize,$blocks)
      = stat("$USER.mbox");
-                                                                                
+
     open(FILE, "<$USER.mbox.size");
     $sz = <FILE>;
-    close(FILE); 
+    close(FILE);
     chomp($sz);
 
     if ($sz == $size) {
@@ -1102,7 +1101,7 @@ sub Quarantine_DeleteSpam {
     $FORM{'template'} = "performance";
     &CheckQuarantine;
     redirect("$CONFIG{'ME'}?user=$FORM{'user'}&amp;template=$FORM{'template'}&amp;language=$LANGUAGE");
-    return; 
+    return;
   }
   open(FILE, "<$MAILBOX");
   while(<FILE>) {
@@ -1110,24 +1109,24 @@ sub Quarantine_DeleteSpam {
     push(@buffer, $_);
   }
   close(FILE);
- 
+
 
   open(FILE, ">$MAILBOX");
- 
+
   while($#buffer>=0) {
     my($buff, $mode, @temp, %head);
     $mode = 0;
     while(($buff !~ /^From /) && ($#buffer>=0)) {
       $buff = $buffer[0];
       if ($buff =~ /^From /) {
-        if ($mode == 0) { 
-          $mode = 1; 
-          $buff = shift(@buffer); 
-          push(@temp, $buff); 
-          $buff = ""; 
-          next; 
-        } else { 
-          next; 
+        if ($mode == 0) {
+          $mode = 1;
+          $buff = shift(@buffer);
+          push(@temp, $buff);
+          $buff = "";
+          next;
+        } else {
+          next;
         }
       }
       $buff = shift(@buffer);
@@ -1223,12 +1222,12 @@ sub DisplayQuarantine {
   while(<FILE>) {
     s/\r?\n//;
     if ($_ ne "") {
-      if ($mode eq "") { 
+      if ($mode eq "") {
         if ($_ =~ /^From /) {
           $mode = 1;
-        } else { 
-          next; 
-        } 
+        } else {
+          next;
+        }
       }
       push(@buffer, $_);
       next;
@@ -1248,8 +1247,8 @@ sub DisplayQuarantine {
       if ($_ =~ /^From /) {
         my(@a) = split(/ /, $_);
         my($x) = 2;
-        for (0..$#a) { 
-          if (($a[$_] =~ /\@|>/) && ($_>$x)) { 
+        for (0..$#a) {
+          if (($a[$_] =~ /\@|>/) && ($_>$x)) {
             $x = $_ + 1;
           }
         }
@@ -1257,12 +1256,12 @@ sub DisplayQuarantine {
         $start = join(" ", @a);
       } else {
         my($key, $val) = split(/\: ?/, $_, 2);
-        $new->{$key} = $val; 
+        $new->{$key} = $val;
       }
     }
-    if ($rowclass eq "rowEven") { 
+    if ($rowclass eq "rowEven") {
       $rowclass = "rowOdd";
-    } else { 
+    } else {
       $rowclass = "rowEven";
     }
 
@@ -1288,8 +1287,8 @@ sub DisplayQuarantine {
     $new->{'Sub2'} = $new->{'X-DSPAM-Signature'};
     if (length($new->{'Subject'})>$CONFIG{'MAX_COL_LEN'}) {
       $new->{'Subject'} = substr($new->{'Subject'}, 0, $CONFIG{'MAX_COL_LEN'} - 3) . "...";
-    } 
- 
+    }
+
     if (length($new->{'From'})>$CONFIG{'MAX_COL_LEN'}) {
       $new->{'From'} = substr($new->{'From'}, 0, $CONFIG{'MAX_COL_LEN'} - 3) . "...";
     }
@@ -1443,10 +1442,10 @@ sub ResetStats {
   my($group);
   open(FILE, "<$USER.stats");
   chomp($ts = <FILE>);
-  chomp($group = <FILE>); 
+  chomp($group = <FILE>);
   close(FILE);
   ($ts, $ti, $tm, $fp, $sc, $ic) = split(/\,/, $ts);
-  
+
   if ($group ne "") {
     my($GROUP) = GetPath($group) . ".stats";
     my($gts, $gti, $gtm, $gfp, $gsc, $gic);
@@ -1482,14 +1481,14 @@ sub Tweak {
 
 sub DisplayIndex {
   my($spam, $innocent, $ratio, $fp, $misses);
-  my($rts, $rti, $rtm, $rfp, $sc, $ic, $overall, $fpratio, $monthly, 
+  my($rts, $rti, $rtm, $rfp, $sc, $ic, $overall, $fpratio, $monthly,
      $real_missed, $real_caught, $real_fp, $real_innocent);
   my($time) = ctime(time);
   my($group);
 
   open(FILE, "<$USER.stats");
   chomp($spam = <FILE>);
-  chomp($group = <FILE>); 
+  chomp($group = <FILE>);
   close(FILE);
   ($spam, $innocent, $misses, $fp, $sc, $ic) = split(/\,/, $spam);
 
@@ -1508,16 +1507,16 @@ sub DisplayIndex {
     $ic       -= $gic;
   }
 
-  if ($spam+$innocent>0) { 
-    $ratio = sprintf("%2.3f", 
-      (($spam+$misses)/($spam+$misses+$fp+$innocent)*100)); 
-  } else { 
-    $ratio = 0; 
+  if ($spam+$innocent>0) {
+    $ratio = sprintf("%2.3f",
+      (($spam+$misses)/($spam+$misses+$fp+$innocent)*100));
+  } else {
+    $ratio = 0;
   }
 
   if (open(FILE, "<$USER.rstats")) {
     my($rstats);
-   
+
     chomp($rstats = <FILE>);
     ($rts, $rti, $rtm, $rfp) = split(/\,/, $rstats);
     close(FILE);
@@ -1525,13 +1524,13 @@ sub DisplayIndex {
     $real_caught = $spam-$rts;
     $real_fp = $fp-$rfp;
     if ($real_fp < 0) { $real_fp = 0; }
-    $real_innocent = $innocent-$rti; 
+    $real_innocent = $innocent-$rti;
     if (($spam-$rts > 0) && ($spam-$rts + $misses-$rtm != 0) &&
         ($real_caught+$real_missed>0) && ($real_fp+$real_innocent>0)) {
-      $monthly = sprintf("%2.3f", 
+      $monthly = sprintf("%2.3f",
         (100.0-(($real_missed)/($real_caught+$real_missed))*100.0));
-      $overall = sprintf("%2.3f", 
-        (100.0-(($real_missed+$real_fp) / 
+      $overall = sprintf("%2.3f",
+        (100.0-(($real_missed+$real_fp) /
         ($real_fp+$real_innocent+$real_caught+$real_missed))*100.0));
     } else {
       if ($real_caught == 0 && $real_missed > 0) {
@@ -1580,7 +1579,7 @@ sub DisplayIndex {
 
   if ($CURRENT_USER !~ /\@/) {
     $DATA{'LOCAL_DOMAIN'} = "\@$CONFIG{'LOCAL_DOMAIN'}";
-  }  
+  }
 
   &output(%DATA);
 }
@@ -1598,7 +1597,7 @@ sub AddAlert {
   close(FILE);
   return;
 }
-                                                                                
+
 sub DeleteAlert {
   my($line, @alerts);
   $line = 0;
@@ -1613,7 +1612,7 @@ sub DeleteAlert {
     $line++;
   }
   close(FILE);
-                                                                                
+
   open(FILE, ">$USER.alerts");
   foreach(@alerts) { print FILE $_; }
   close(FILE);
@@ -1622,7 +1621,7 @@ sub DeleteAlert {
 
 sub DisplayAlerts {
   my($supp);
-  
+
   $DATA{'ALERTS'} = <<_end;
 <table border="0" cellspacing="0" cellpadding="2">
 	<tr>
@@ -1649,7 +1648,7 @@ _end
 	$rowclass = "rowEven";
       }
     }
-  }; 
+  };
 
 $DATA{'ALERTS'} .= <<_end;
 </table>
@@ -1748,7 +1747,7 @@ sub output {
   };
 
   open(FILE, "<$CONFIG{'TEMPLATES'}/nav_$FORM{'template'}.html");
-  while(<FILE>) { 
+  while(<FILE>) {
     s/\$CGI\$/$CONFIG{'ME'}/g;
     if($FORM{'user'}) {
       if($CONFIG{'ADMIN'} == 1) {
@@ -1833,7 +1832,7 @@ sub CheckQuarantine {
     next unless (/^From /);
     $f++;
   }
-  close(FILE);   
+  close(FILE);
   if ($f == 0) {
     $f = "$CONFIG{'LANG'}->{$LANGUAGE}->{'empty'}";
   }
@@ -1870,7 +1869,7 @@ sub GetPath {
   } elsif ($CONFIG{'LARGE_SCALE'} == 0) {
     $PATH = "$CONFIG{'DSPAM_HOME'}/data/$USER/$USER";
     return $PATH;
-                                                                                
+
   # Large-scale
   } else {
     if (length($USER)>1) {

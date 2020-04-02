@@ -32,7 +32,7 @@ $CONFIG{'TEMPLATES'}	= "./templates";	# Location of HTML templates
 $CONFIG{'DSPAM_PROCESSES'} = "ps auxw | grep dspam | grep -v 'grep\|cgi\|sock' | wc -l"; # use ps -deaf for Solaris
 $CONFIG{'MAIL_QUEUE'}	= "mailq | grep '^[0-9,A-F]\{10,12\}[\t ][\t ]*[1-9]' | wc -l";
 
-$CONFIG{'WEB_ROOT'}	= ""; # URL location of included htdocs/ files
+$CONFIG{'WEB_ROOT'}	= "/dspam/htdocs"; # URL location of included htdocs/ files
 
 # Default DSPAM display
 #$CONFIG{'DATE_FORMAT'}	= "%d.%m.%Y %H:%M"; # Date format in strftime style
@@ -42,7 +42,7 @@ $CONFIG{'HISTORY_PER_PAGE'} = 100;	# Number of items per page
 $CONFIG{'HISTORY_DUPLICATES'} = "yes";	# Wether to show duplicate entries in history "yes" or "no"
 $CONFIG{'HISTORY_HTMLIZE'} = "no";	# Wether to HTML-ize sender and subject in history "yes" or "no"
 $CONFIG{'QUARANTINE_HTMLIZE'} = "no";	# Wether to HTML-ize sender and subject in quarantine "yes" or "no"
-$CONFIG{'MAX_COL_LEN'}	= 50;		# Max chars in list columns
+$CONFIG{'MAX_COL_LEN'}	= 100;		# Max chars in list columns
 $CONFIG{'SORT_DEFAULT'}	= "Rating";	# Show quarantine by "Date" or "Rating"
 $CONFIG{'3D_GRAPHS'}	= 1;		# 0=graphs in 2D, 1=graphs in 3D
 $CONFIG{'OPTMODE'}	= "NONE";	# OUT=OptOut IN=OptIn NONE=not selectable

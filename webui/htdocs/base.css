@@ -32,6 +32,9 @@ em {
 	font-style:normal;
 }
 
+table tr.selected {
+	background-color: #b8e1ff;
+}
 /* classes */
 
 .rowEven {background-color:#dddddd;}
