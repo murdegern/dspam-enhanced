@@ -47,6 +47,7 @@ deliver any false positives that are still in your quarantine.
 <input type="hidden" name="language" value="$LANG$">
 
 &nbsp;&nbsp;$SHOW_SELECTOR$
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="reg_mark_pattern" onkeypress="regMarkPressed(event)" alt="regex pattern to search over FROM field"/>&nbsp;&nbsp;<input type="button" value="Mark by RegEx" onclick="regMark()"/>
 
 $HISTORYPAGES$
 

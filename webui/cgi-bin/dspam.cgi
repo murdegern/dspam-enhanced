@@ -564,7 +564,7 @@ sub DisplayHistory {
     if ( $class eq "V" || $class eq "A" || $class eq "O" || $class eq "U" || $class eq "") {
       $retrain_action = qq!<small>&nbsp;</small>!;
     } else {
-      $retrain_action = qq!<input name="msgid$retrain_checked_msg_no" type="checkbox" value="$rclass:$signature" id="checkbox-$counter" onclick="checkboxclicked(this)"><small>$retrain</small>!;
+      $retrain_action = qq!<input name="msgid$retrain_checked_msg_no" type="checkbox" value="$rclass:$signature" id="checkbox-$counter" onclick="checkboxClicked(this)"><small>$retrain</small>!;
     }
 
     my($entry) = <<_END;
@@ -572,8 +572,8 @@ sub DisplayHistory {
  <td class="$cl" nowrap="nowrap"><small>$cllabel</small></td>
  <td nowrap="nowrap">$retrain_action</td>
  <td nowrap="nowrap"><small>$ctime</small></td>
- <td nowrap="nowrap" onclick="clickcheckbox($counter)"><small>$from</small></td>
- <td nowrap="nowrap" onclick="clickcheckbox($counter)"><small>$subject</small></td>
+ <td nowrap="nowrap" onclick="clickCheckbox($counter)"><small class="reg_mark_from" id="reg_from-$counter">$from</small></td>
+ <td nowrap="nowrap" onclick="clickCheckbox($counter)"><small>$subject</small></td>
  <td nowrap="nowrap"><small>$info</small></td>
 </tr>
 _END
@@ -1415,7 +1415,7 @@ sub DisplayQuarantine {
 
     $DATA{'QUARANTINE'} .= <<_END;
 <tr>
- <td class="$outclass" nowrap="nowrap"><input type="checkbox" name="$row->{'X-DSPAM-Signature'}" id="checkbox-$counter" onclick="checkboxclicked(this)"></td>
+ <td class="$outclass" nowrap="nowrap"><input type="checkbox" name="$row->{'X-DSPAM-Signature'}" id="checkbox-$counter" onclick="checkboxClicked(this)"></td>
  <td class="$outclass $markclass" nowrap="nowrap">$rating</td>
  <td class="$outclass" nowrap="nowrap">$ptime</td>
  <td class="$outclass" nowrap="nowrap">$row->{'From'}</td>
