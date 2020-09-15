@@ -37,6 +37,6 @@ config_t read_config (const char *path);
 int configure_algorithms (DSPAM_CTX * CTX);
 
 agent_pref_t pref_config(void);
-config_t agent_config;
+extern config_t agent_config;
 
 #endif /* _READ_CONFIG_H */

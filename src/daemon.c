@@ -69,6 +69,11 @@
 #include "buffer.h"
 #include "language.h"
 
+int __daemon_run;	/* should we keep running? */
+int __num_threads;	/* number of live threads */
+int __hup;		/* should we reload? */
+pthread_mutex_t __lock;	/* global var lock */
+
 /*
  * daemon_listen(DRIVER_CTX *DTX)
  *

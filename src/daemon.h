@@ -42,10 +42,10 @@
 
 #ifdef DAEMON
 
-int __daemon_run;	/* should we keep running? */
-int __num_threads;	/* number of live threads */
-int __hup;		/* should we reload? */
-pthread_mutex_t __lock;	/* global var lock */
+extern int __daemon_run;	/* should we keep running? */
+extern int __num_threads;	/* number of live threads */
+extern int __hup;		/* should we reload? */
+extern pthread_mutex_t __lock;	/* global var lock */
 
 typedef struct {
   int sockfd;

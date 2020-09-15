@@ -51,6 +51,7 @@
 #include "config_api.h"
 #include "pref.h"
 #include "error.h"
+#include "agent_shared.h"
 
 DSPAM_CTX *open_ctx = NULL, *open_mtx = NULL;
 
