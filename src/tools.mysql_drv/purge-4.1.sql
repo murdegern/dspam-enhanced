@@ -1,5 +1,9 @@
 -- $Id: purge-4.1.sql,v 1.11 2010/04/21 21:14:18 sbajic Exp $
 
+-- This script, and only this script, should be used for cleaning up DSPAM
+-- databases.
+-- (tlu)
+
 --
 -- This file contains statements for purging the DSPAM for MySQL 4.1 or greater.
 --

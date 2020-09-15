@@ -1,5 +1,8 @@
 -- $Id: mysql_objects-4.1.sql,v 1.43 2011/05/09 22:58:48 sbajic Exp $
 
+-- This script, and only this script, should be used for new DSPAM databases.
+-- (tlu)
+
 --
 -- This file contains statements for creating the DSPAM 
 -- database objects for MySQL 4.1 or greater.
@@ -14,6 +17,9 @@ create table dspam_token_data (
 ) engine=MyISAM default charset=latin1 collate=latin1_general_ci pack_keys=1;
 
 create unique index id_token_data_01 on dspam_token_data(uid,token);
+create index id_token_data_02 on dspam_token_data (spam_hits);
+create index id_token_data_03 on dspam_token_data (innocent_hits);
+create index id_token_data_04 on dspam_token_data (last_hit);
 
 create table dspam_signature_data (
   uid int unsigned not null,
