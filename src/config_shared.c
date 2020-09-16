@@ -44,6 +44,8 @@
 #include "language.h"
 #include "libdspam.h"
 
+config_t agent_config;
+
 attribute_t _ds_find_attribute(config_t config, const char *key) {
   int i;
 

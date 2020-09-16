@@ -88,7 +88,7 @@ typedef struct _hash_drv_map
   size_t			num_extents;
 } *hash_drv_map_t;
 
-struct _hash_drv_storage
+typedef struct _hash_drv_storage
 {
   hash_drv_map_t map;
   FILE *lock;
